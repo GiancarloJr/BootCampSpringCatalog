@@ -1,6 +1,6 @@
 package com.bootcamp.dscatalog.resources;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -30,5 +30,4 @@ public class CategoryResource {
 	public ResponseEntity<Optional<Category>> findById(@PathVariable Long id) {
 		return ResponseEntity.ok().body(categoryServices.findById(id));
 	}
-
 }

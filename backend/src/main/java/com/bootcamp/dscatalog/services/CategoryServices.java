@@ -10,16 +10,16 @@ import org.springframework.stereotype.Service;
 import com.bootcamp.dscatalog.dto.CategoryDTO;
 import com.bootcamp.dscatalog.entities.Category;
 import com.bootcamp.dscatalog.repository.CategoryRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CategoryServices {
 	
 	@Autowired
 	private CategoryRepository categoryRepository;
-	
+
+	@Transactional(readOnly = true)
 	public List<CategoryDTO> findAll(){
-		
-		
 		//USANDO STREAM E MAP PARA DTO
 		List<Category>  list = categoryRepository.findAll();
 		return list.stream().map(cat -> new CategoryDTO(cat)).collect(Collectors.toList());
@@ -30,12 +30,15 @@ public class CategoryServices {
 //			dto.add(new CategoryDTO(category));
 //		}
 //		return dto;
+	}
+	@Transactional(readOnly = true)
+	public CategoryDTO findById(Long id){
+		Optional<Category> cat = categoryRepository.findById(id);
+		return entityParaDTO(cat.get());
 		
 	}
-	
-	public Optional<Category> findById(Long id){
-		return categoryRepository.findById(id);
-		
+	public CategoryDTO entityParaDTO(Category category){
+		return new CategoryDTO(category.getId(), category.getName());
 	}
 	
 	

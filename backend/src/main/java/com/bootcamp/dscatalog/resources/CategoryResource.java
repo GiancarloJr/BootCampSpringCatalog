@@ -2,7 +2,6 @@ package com.bootcamp.dscatalog.resources;
 
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bootcamp.dscatalog.dto.CategoryDTO;
-import com.bootcamp.dscatalog.entities.Category;
 import com.bootcamp.dscatalog.services.CategoryServices;
 
 @RestController
@@ -28,7 +26,7 @@ public class CategoryResource {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<Category>> findById(@PathVariable Long id) {
+	public ResponseEntity<CategoryDTO> findById(@PathVariable Long id) {
 		return ResponseEntity.ok().body(categoryServices.findById(id));
 	}
 }

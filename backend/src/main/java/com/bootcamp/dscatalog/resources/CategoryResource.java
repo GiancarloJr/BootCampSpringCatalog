@@ -1,17 +1,17 @@
 package com.bootcamp.dscatalog.resources;
 
 
+import java.net.URI;
 import java.util.List;
 
+import com.bootcamp.dscatalog.entities.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.bootcamp.dscatalog.dto.CategoryDTO;
 import com.bootcamp.dscatalog.services.CategoryServices;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/category")
@@ -28,5 +28,12 @@ public class CategoryResource {
 	@GetMapping("/{id}")
 	public ResponseEntity<CategoryDTO> findById(@PathVariable Long id) {
 		return ResponseEntity.ok().body(categoryServices.findById(id));
+	}
+
+	@PostMapping("/")
+	public ResponseEntity<CategoryDTO> insert(@RequestBody CategoryDTO categoryDTO) {
+//		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+//				.buildAndExpand(categoryDTO.getId()).toUri();
+		return ResponseEntity.ok().body(categoryServices.save(categoryDTO));
 	}
 }

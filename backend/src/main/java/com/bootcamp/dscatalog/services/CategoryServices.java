@@ -39,6 +39,13 @@ public class CategoryServices {
 		return entityParaDTO(entity);
 		
 	}
+
+	public CategoryDTO save(CategoryDTO categoryDTO){
+		Category obj = new Category();
+		obj.setName(categoryDTO.getName());
+		return entityParaDTO(categoryRepository.save(obj));
+	}
+
 	public CategoryDTO entityParaDTO(Category category){
 		return new CategoryDTO(category.getId(), category.getName());
 	}

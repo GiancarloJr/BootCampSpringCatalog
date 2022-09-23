@@ -5,8 +5,11 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.bootcamp.dscatalog.services.exceptions.DataBaseException;
 import com.bootcamp.dscatalog.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.bootcamp.dscatalog.dto.CategoryDTO;
@@ -55,6 +58,15 @@ public class CategoryServices {
 			return entityParaDTO(categoryRepository.save(obj.get()));
 		} catch (NoSuchElementException e){
 			throw new ResourceNotFoundException("Entity not found");
+		}
+	}
+	public void delete(Long id){
+		try {
+			categoryRepository.deleteById(id);
+		} catch (EmptyResultDataAccessException e){
+			throw new ResourceNotFoundException("Entity not found");
+		} catch (DataIntegrityViolationException e) {
+			throw new DataBaseException("Integraty violation");
 		}
 	}
 

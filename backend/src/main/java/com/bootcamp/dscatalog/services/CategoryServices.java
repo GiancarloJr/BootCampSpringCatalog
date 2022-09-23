@@ -1,10 +1,11 @@
 package com.bootcamp.dscatalog.services;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.bootcamp.dscatalog.services.exceptions.EntityNotFoundException;
+import com.bootcamp.dscatalog.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,8 @@ import com.bootcamp.dscatalog.dto.CategoryDTO;
 import com.bootcamp.dscatalog.entities.Category;
 import com.bootcamp.dscatalog.repository.CategoryRepository;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityNotFoundException;
 
 @Service
 public class CategoryServices {
@@ -35,7 +38,7 @@ public class CategoryServices {
 	@Transactional(readOnly = true)
 	public CategoryDTO findById(Long id){
 		Optional<Category> obj = categoryRepository.findById(id);
-		Category entity = obj.orElseThrow(()-> new EntityNotFoundException("Objeto nao encontrado"));
+		Category entity = obj.orElseThrow(()-> new ResourceNotFoundException("Objeto nao encontrado"));
 		return entityParaDTO(entity);
 		
 	}
@@ -44,6 +47,15 @@ public class CategoryServices {
 		Category obj = new Category();
 		obj.setName(categoryDTO.getName());
 		return entityParaDTO(categoryRepository.save(obj));
+	}
+	public CategoryDTO update(CategoryDTO categoryDTO){
+		try {
+			Optional<Category> obj = categoryRepository.findById(categoryDTO.getId());
+			obj.get().setName(categoryDTO.getName());
+			return entityParaDTO(categoryRepository.save(obj.get()));
+		} catch (NoSuchElementException e){
+			throw new ResourceNotFoundException("Entity not found");
+		}
 	}
 
 	public CategoryDTO entityParaDTO(Category category){

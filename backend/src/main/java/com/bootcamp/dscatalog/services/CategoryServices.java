@@ -1,15 +1,15 @@
 package com.bootcamp.dscatalog.services;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import com.bootcamp.dscatalog.services.exceptions.DataBaseException;
 import com.bootcamp.dscatalog.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.bootcamp.dscatalog.dto.CategoryDTO;
@@ -17,7 +17,6 @@ import com.bootcamp.dscatalog.entities.Category;
 import com.bootcamp.dscatalog.repository.CategoryRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 
 @Service
 public class CategoryServices {
@@ -26,10 +25,10 @@ public class CategoryServices {
 	private CategoryRepository categoryRepository;
 
 	@Transactional(readOnly = true)
-	public List<CategoryDTO> findAll(){
+	public Page<CategoryDTO> findAllPaged(PageRequest pageRequest){
 		//USANDO STREAM E MAP PARA DTO
-		List<Category>  list = categoryRepository.findAll();
-		return list.stream().map(cat -> new CategoryDTO(cat)).collect(Collectors.toList());
+		Page<Category>  list = categoryRepository.findAll(pageRequest);
+		return list.map(cat -> new CategoryDTO(cat));
 	
 		//USANDO FOREACH PARA DTO
 		//List<CategoryDTO>  dto = new ArrayList<>();
@@ -73,7 +72,6 @@ public class CategoryServices {
 	public CategoryDTO entityParaDTO(Category category){
 		return new CategoryDTO(category.getId(), category.getName());
 	}
-	
-	
+
 
 }

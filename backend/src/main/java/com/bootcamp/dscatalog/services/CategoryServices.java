@@ -3,6 +3,8 @@ package com.bootcamp.dscatalog.services;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import com.bootcamp.dscatalog.dto.ProductDTO;
+import com.bootcamp.dscatalog.entities.Product;
 import com.bootcamp.dscatalog.services.exceptions.DataBaseException;
 import com.bootcamp.dscatalog.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +52,9 @@ public class CategoryServices {
 		obj.setName(categoryDTO.getName());
 		return entityParaDTO(categoryRepository.save(obj));
 	}
+
+
+
 	public CategoryDTO update(CategoryDTO categoryDTO){
 		try {
 			Optional<Category> obj = categoryRepository.findById(categoryDTO.getId());

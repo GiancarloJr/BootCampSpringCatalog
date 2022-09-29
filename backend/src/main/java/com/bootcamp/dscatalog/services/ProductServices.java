@@ -1,7 +1,10 @@
 package com.bootcamp.dscatalog.services;
 
+import com.bootcamp.dscatalog.dto.CategoryDTO;
 import com.bootcamp.dscatalog.dto.ProductDTO;
+import com.bootcamp.dscatalog.entities.Category;
 import com.bootcamp.dscatalog.entities.Product;
+import com.bootcamp.dscatalog.repository.CategoryRepository;
 import com.bootcamp.dscatalog.repository.ProductRepository;
 import com.bootcamp.dscatalog.services.exceptions.DataBaseException;
 import com.bootcamp.dscatalog.services.exceptions.ResourceNotFoundException;
@@ -22,6 +25,8 @@ public class ProductServices {
 	
 	@Autowired
 	private ProductRepository productRepository;
+	@Autowired
+	private CategoryRepository categoryRepository;
 
 	@Transactional(readOnly = true)
 	public Page<ProductDTO> findAllPaged(PageRequest pageRequest){
@@ -42,16 +47,32 @@ public class ProductServices {
 		Product entity = obj.orElseThrow(()-> new ResourceNotFoundException("Objeto nao encontrado"));
 		return new ProductDTO(entity, entity.getCategories());
 	}
-
+	@Transactional
 	public ProductDTO save(ProductDTO productDTO){
 		Product obj = new Product();
-		//obj.setName(productDTO.getName());
+		copyDtoToEntity(productDTO, obj);
 		return new ProductDTO(productRepository.save(obj));
 	}
-	public ProductDTO update(ProductDTO ProductDTO){
+
+	private void copyDtoToEntity(ProductDTO dto,Product entity){
+		entity.setName(dto.getName());
+		entity.setDate(dto.getDate());
+		entity.setDescription(dto.getDescription());
+		entity.setImgUrl(dto.getImgUrl());
+		entity.setPrice(dto.getPrice());
+
+		entity.getCategories().clear();
+		for(CategoryDTO catDTO: dto.getCategories()){
+			Category category = categoryRepository.getReferenceById(catDTO.getId());
+			entity.getCategories().add(category);
+		}
+
+	}
+	@Transactional
+	public ProductDTO update(ProductDTO productDTO){
 		try {
-			Optional<Product> obj = productRepository.findById(ProductDTO.getId());
-			//obj.get().setName(ProductDTO.getName());
+			Optional<Product> obj = productRepository.findById(productDTO.getId());
+			copyDtoToEntity(productDTO, obj.get());
 			return new ProductDTO(productRepository.save(obj.get()));
 		} catch (NoSuchElementException e){
 			throw new ResourceNotFoundException("Entity not found");

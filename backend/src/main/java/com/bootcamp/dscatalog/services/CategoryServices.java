@@ -3,8 +3,6 @@ package com.bootcamp.dscatalog.services;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import com.bootcamp.dscatalog.dto.ProductDTO;
-import com.bootcamp.dscatalog.entities.Product;
 import com.bootcamp.dscatalog.services.exceptions.DataBaseException;
 import com.bootcamp.dscatalog.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.bootcamp.dscatalog.dto.CategoryDTO;
@@ -27,9 +26,9 @@ public class CategoryServices {
 	private CategoryRepository categoryRepository;
 
 	@Transactional(readOnly = true)
-	public Page<CategoryDTO> findAllPaged(PageRequest pageRequest){
+	public Page<CategoryDTO> findAllPaged(Pageable pageable){
 		//USANDO STREAM E MAP PARA DTO
-		Page<Category>  list = categoryRepository.findAll(pageRequest);
+		Page<Category>  list = categoryRepository.findAll(pageable);
 		return list.map(cat -> new CategoryDTO(cat));
 	
 		//USANDO FOREACH PARA DTO

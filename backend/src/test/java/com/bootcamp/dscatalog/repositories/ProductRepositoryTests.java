@@ -2,7 +2,9 @@ package com.bootcamp.dscatalog.repositories;
 
 import com.bootcamp.dscatalog.entities.Product;
 import com.bootcamp.dscatalog.repository.ProductRepository;
+import com.bootcamp.dscatalog.tests.Factory;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -16,10 +18,32 @@ public class ProductRepositoryTests {
     @Autowired
     private ProductRepository productRepository;
 
+    private long existingId;
+    private long notExistingId;
+    private long countTotalProducts;
+
+    @BeforeEach
+    void setUp() throws Exception{
+          existingId = 1L;
+          notExistingId = 30L;
+          countTotalProducts = 25L;
+    }
+    @Test
+    public void saveShouldPersistWithAutoIncrementWhenIdIsNull(){
+
+        Product product = Factory.createProduct();
+        product.setId(null);
+
+        product = productRepository.save(product);
+
+        Assertions.assertNotNull(product.getId());
+        Assertions.assertEquals(countTotalProducts+1, product.getId());
+
+    }
+
     @Test
     public void deleteShouldDeleteObjectWhenIdExists(){
 
-        long existingId = 1L;
          productRepository.deleteById(existingId);
          Optional<Product> result = productRepository.findById(existingId);
 
@@ -29,10 +53,8 @@ public class ProductRepositoryTests {
     @Test
     public void deleteShouldThrowEmptyResultDataAccessExceptionWhenIdDoesNotExists(){
 
-        long NotExistingId = 35L;
-
         Assertions.assertThrows(EmptyResultDataAccessException.class, () -> {
-                    productRepository.deleteById(NotExistingId);
+                    productRepository.deleteById(notExistingId);
                 });
     }
 }

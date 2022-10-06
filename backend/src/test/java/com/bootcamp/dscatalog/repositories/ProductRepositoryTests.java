@@ -2,6 +2,7 @@ package com.bootcamp.dscatalog.repositories;
 
 import com.bootcamp.dscatalog.entities.Product;
 import com.bootcamp.dscatalog.repository.ProductRepository;
+import com.bootcamp.dscatalog.services.exceptions.ResourceNotFoundException;
 import com.bootcamp.dscatalog.tests.Factory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,4 +58,23 @@ public class ProductRepositoryTests {
                     productRepository.deleteById(notExistingId);
                 });
     }
+    @Test
+    public void findByIdShouldFindByIdWhenIdExists(){
+
+        Optional<Product> result = productRepository.findById(existingId);
+
+
+        Assertions.assertEquals(Product.class, result.get().getClass());
+        Assertions.assertTrue(result.isPresent());
+        Assertions.assertEquals(result.get().getId(), 1L);
+    }
+    @Test
+    public void findByIdShouldThrowEntityNotFoundWhenIdDoesNotExists(){
+
+        Optional<Product> result = productRepository.findById(notExistingId);
+
+        Assertions.assertTrue(result.isEmpty());
+        Assertions.assertFalse(result.isPresent());
+    }
+
 }

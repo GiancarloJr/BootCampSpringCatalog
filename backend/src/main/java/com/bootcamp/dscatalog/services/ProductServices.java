@@ -30,9 +30,9 @@ public class ProductServices {
 	private CategoryRepository categoryRepository;
 
 	@Transactional(readOnly = true)
-	public Page<ProductDTO> findAllPaged(Pageable peaPageable){
+	public Page<ProductDTO> findAllPaged(Pageable pageable){
 		//USANDO STREAM E MAP PARA DTO
-		Page<Product>  list = productRepository.findAll(peaPageable);
+		Page<Product>  list = productRepository.findAll(pageable);
 		return list.map(cat -> new ProductDTO(cat));
 	
 		//USANDO FOREACH PARA DTO

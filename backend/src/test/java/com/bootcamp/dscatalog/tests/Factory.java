@@ -1,5 +1,6 @@
 package com.bootcamp.dscatalog.tests;
 
+import com.bootcamp.dscatalog.dto.CategoryDTO;
 import com.bootcamp.dscatalog.dto.ProductDTO;
 import com.bootcamp.dscatalog.entities.Category;
 import com.bootcamp.dscatalog.entities.Product;
@@ -16,6 +17,14 @@ public class Factory {
 
     public static ProductDTO createProductDTO(){
         return new ProductDTO(createProduct(), createProduct().getCategories());
+    }
+
+    public static Category createCategory(){
+        Category category = new Category(1L, "Eletronics");
+        return category;
+    }
+    public static CategoryDTO createCategoryDTO(){
+        return new CategoryDTO(createCategory());
     }
 
 

@@ -21,6 +21,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.EntityNotFoundException;
@@ -78,6 +79,8 @@ public class ProductServiceTests {
                 Mockito.when(repository.findById(noExistingId)).thenReturn(Optional.empty());
 
                 Mockito.when(repository.findAll((org.springframework.data.domain.Pageable)ArgumentMatchers.any())).thenReturn(page);
+
+
 
                 Mockito.doNothing().when(repository).deleteById(existingId);
                 Mockito.doThrow(EmptyResultDataAccessException.class).when(repository).deleteById(noExistingId);

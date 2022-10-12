@@ -23,10 +23,8 @@ public class Factory {
         Category category = new Category(1L, "Eletronics");
         return category;
     }
+
     public static CategoryDTO createCategoryDTO(){
         return new CategoryDTO(createCategory());
     }
-
-
-
 }

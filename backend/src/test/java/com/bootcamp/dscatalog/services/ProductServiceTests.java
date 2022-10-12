@@ -80,8 +80,6 @@ public class ProductServiceTests {
 
                 Mockito.when(repository.findAll((org.springframework.data.domain.Pageable)ArgumentMatchers.any())).thenReturn(page);
 
-
-
                 Mockito.doNothing().when(repository).deleteById(existingId);
                 Mockito.doThrow(EmptyResultDataAccessException.class).when(repository).deleteById(noExistingId);
                 Mockito.doThrow(DataIntegrityViolationException.class).when(repository).deleteById(dependentId);

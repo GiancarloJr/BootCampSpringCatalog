@@ -87,7 +87,7 @@ public class ProductResourceTests {
         result.andExpect(status().isOk());
         result.andExpect(jsonPath("$.id").exists());
         result.andExpect(jsonPath("$.name").exists());
-        result.andExpect(jsonPath("$.description").exists());
+        result.andExpect(jsonPath("$.description").isBoolean());
     }
     @Test
     public void findByIdShouldReturnNotFoundWhenIdDoesNotExisting() throws Exception{
@@ -137,9 +137,10 @@ public class ProductResourceTests {
         result.andExpect(status().isNoContent());
     }
     @Test
-    public void deleteShouldDeleteByIdWhenIdDoesNotExists() throws Exception{
+    public void deleteShouldReturnNotFoundByIdWhenIdDoesNotExists() throws Exception{
 
-        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.delete("/products/{id}", noExistingId));
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.delete("/products/{id}", noExistingId)
+                .accept(MediaType.APPLICATION_JSON));
 
         result.andExpect(status().isNotFound());
     }

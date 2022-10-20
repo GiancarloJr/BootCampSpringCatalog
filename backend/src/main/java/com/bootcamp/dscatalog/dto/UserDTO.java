@@ -2,14 +2,21 @@ package com.bootcamp.dscatalog.dto;
 
 import com.bootcamp.dscatalog.entities.User;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
 
 public class UserDTO {
 
     private Long id;
+
+    @NotBlank(message = "Nao pode ser vazio")
     private String firstName;
+
     private String lastName;
+
+    @Email(message = "Favor colocar e-mail valido")
     private String email;
 
     Set<RoleDTO> roles = new HashSet<>();

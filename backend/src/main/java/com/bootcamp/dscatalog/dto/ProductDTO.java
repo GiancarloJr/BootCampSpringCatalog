@@ -4,6 +4,7 @@ import com.bootcamp.dscatalog.entities.Category;
 import com.bootcamp.dscatalog.entities.Product;
 
 import javax.persistence.Column;
+import javax.validation.constraints.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,14 +15,19 @@ public class ProductDTO {
 
     private Long id;
 
+    @Size(min = 5, max = 60, message = "Entre 5 e 60 caracteres")
+    @NotBlank(message = "Nao pode ser vazio")
     private String name;
 
+    @Positive(message = "Valor deve ser positivo")
     private Double price;
 
+    @NotBlank(message = "Campo requerido")
     private String description;
 
     private String imgUrl;
 
+    @PastOrPresent(message = "Data do produto nao pode ser futura")
     private Instant date;
 
     private List<CategoryDTO> categories = new ArrayList<>();

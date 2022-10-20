@@ -13,8 +13,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
@@ -38,14 +40,14 @@ public class ProductResource {
 	}
 
 	@PostMapping("/")
-	public ResponseEntity<ProductDTO> insert(@RequestBody ProductDTO productDTO) {
+	public ResponseEntity<ProductDTO> insert(@Valid @RequestBody ProductDTO productDTO) {
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(productDTO.getId()).toUri();
-		return ResponseEntity.ok().body(productServices.save(productDTO));
+			return ResponseEntity.ok().body(productServices.save(productDTO));
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<ProductDTO> update(@PathVariable("id") Long id,@RequestBody ProductDTO productDTO) {
+	public ResponseEntity<ProductDTO> update(@PathVariable("id") Long id,@Valid @RequestBody ProductDTO productDTO) {
 		productDTO.setId(id);
 		return ResponseEntity.ok().body(productServices.update(productDTO));
 	}

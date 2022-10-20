@@ -65,21 +65,13 @@ public class ProductServiceTests {
                 productDTO = Factory.createProductDTO();
 
                 Mockito.when(repository.save(ArgumentMatchers.any())).thenReturn(product);
-
                 Mockito.when(repository.findById(existingId)).thenReturn(Optional.of(product));
-
-                Mockito.when(categoryRepository.getReferenceById(existingId)).thenReturn(category);
-
-                Mockito.when(categoryRepository.getReferenceById(noExistingId)).thenThrow(ResourceNotFoundException.class);
-
-                Mockito.when(repository.getReferenceById(existingId)).thenReturn(product);
-
-                Mockito.when(repository.getReferenceById(noExistingId)).thenThrow(ResourceNotFoundException.class);
-
                 Mockito.when(repository.findById(noExistingId)).thenReturn(Optional.empty());
-
+                Mockito.when(categoryRepository.getReferenceById(existingId)).thenReturn(category);
+                Mockito.when(categoryRepository.getReferenceById(noExistingId)).thenThrow(ResourceNotFoundException.class);
+                Mockito.when(repository.getReferenceById(existingId)).thenReturn(product);
+                Mockito.when(repository.getReferenceById(noExistingId)).thenThrow(ResourceNotFoundException.class);
                 Mockito.when(repository.findAll((org.springframework.data.domain.Pageable)ArgumentMatchers.any())).thenReturn(page);
-
                 Mockito.doNothing().when(repository).deleteById(existingId);
                 Mockito.doThrow(EmptyResultDataAccessException.class).when(repository).deleteById(noExistingId);
                 Mockito.doThrow(DataIntegrityViolationException.class).when(repository).deleteById(dependentId);

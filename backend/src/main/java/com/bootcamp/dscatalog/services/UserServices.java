@@ -3,6 +3,7 @@ package com.bootcamp.dscatalog.services;
 import com.bootcamp.dscatalog.dto.CategoryDTO;
 import com.bootcamp.dscatalog.dto.RoleDTO;
 import com.bootcamp.dscatalog.dto.UserDTO;
+import com.bootcamp.dscatalog.dto.UserInsertDTO;
 import com.bootcamp.dscatalog.entities.Category;
 import com.bootcamp.dscatalog.entities.Role;
 import com.bootcamp.dscatalog.entities.User;
@@ -16,6 +17,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,9 @@ import java.util.Optional;
 
 @Service
 public class UserServices {
+
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -52,10 +57,11 @@ public class UserServices {
 		return new UserDTO(entity);
 	}
 	@Transactional
-	public UserDTO save(UserDTO userDTO){
-		User obj = new User();
-		copyDtoToEntity(userDTO, obj);
-		return new UserDTO(userRepository.save(obj));
+	public UserDTO save(UserInsertDTO userDTO){
+		User entity = new User();
+		copyDtoToEntity(userDTO, entity);
+		entity.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+		return new UserDTO(userRepository.save(entity));
 	}
 
 	private void copyDtoToEntity(UserDTO userDTO,User entity){

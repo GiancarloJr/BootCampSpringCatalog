@@ -1,5 +1,7 @@
 package com.bootcamp.dscatalog.resources.exceptions;
 
+import java.util.Locale;
+
 public class FieldMessage {
 
     private String fieldName;

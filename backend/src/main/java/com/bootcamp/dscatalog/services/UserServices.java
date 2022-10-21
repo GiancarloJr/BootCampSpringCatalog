@@ -1,9 +1,6 @@
 package com.bootcamp.dscatalog.services;
 
-import com.bootcamp.dscatalog.dto.CategoryDTO;
-import com.bootcamp.dscatalog.dto.RoleDTO;
-import com.bootcamp.dscatalog.dto.UserDTO;
-import com.bootcamp.dscatalog.dto.UserInsertDTO;
+import com.bootcamp.dscatalog.dto.*;
 import com.bootcamp.dscatalog.entities.Category;
 import com.bootcamp.dscatalog.entities.Role;
 import com.bootcamp.dscatalog.entities.User;
@@ -77,7 +74,7 @@ public class UserServices {
 
 	}
 	@Transactional
-	public UserDTO update(UserDTO UserDTO){
+	public UserDTO update(UserUpdateDTO UserDTO){
 		try {
 			Optional<User> obj = userRepository.findById(UserDTO.getId());
 			copyDtoToEntity(UserDTO, obj.get());

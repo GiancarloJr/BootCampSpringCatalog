@@ -9,11 +9,16 @@ import com.bootcamp.dscatalog.repository.RoleRepository;
 import com.bootcamp.dscatalog.repository.UserRepository;
 import com.bootcamp.dscatalog.services.exceptions.DataBaseException;
 import com.bootcamp.dscatalog.services.exceptions.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +28,9 @@ import java.util.Optional;
 
 
 @Service
-public class UserServices {
+public class UserServices implements UserDetailsService {
+
+	private static Logger logger = LoggerFactory.getLogger(UserServices.class);
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -71,8 +78,8 @@ public class UserServices {
 			Role role = roleRepository.getReferenceById(roleDTO.getId());
 			entity.getRoles().add(role);
 		}
-
 	}
+
 	@Transactional
 	public UserDTO update(UserUpdateDTO UserDTO){
 		try {
@@ -83,6 +90,7 @@ public class UserServices {
 			throw new ResourceNotFoundException("Entity not found");
 		}
 	}
+
 	public void delete(Long id){
 		try {
 			userRepository.deleteById(id);
@@ -93,9 +101,14 @@ public class UserServices {
 		}
 	}
 
-//	public UserDTO entityParaDTO(User User){
-//		return new UserDTO(User);
-//	}
-
-
+	@Override
+	public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
+		User user = userRepository.findByEmail(userEmail);
+		if(user == null){
+			logger.error("User not found"+ userEmail);
+			throw new UsernameNotFoundException("Email not found");
+		}else
+			logger.info("User found: "+userEmail);
+			return user;
+	}
 }

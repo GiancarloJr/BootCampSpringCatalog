@@ -3,11 +3,9 @@ package com.bootcamp.dscatalog.dto;
 import com.bootcamp.dscatalog.entities.Category;
 import com.bootcamp.dscatalog.entities.Product;
 
-import javax.persistence.Column;
 import javax.validation.constraints.*;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 

@@ -1,10 +1,8 @@
 package com.bootcamp.dscatalog.services;
 
 import com.bootcamp.dscatalog.dto.*;
-import com.bootcamp.dscatalog.entities.Category;
 import com.bootcamp.dscatalog.entities.Role;
 import com.bootcamp.dscatalog.entities.User;
-import com.bootcamp.dscatalog.repository.CategoryRepository;
 import com.bootcamp.dscatalog.repository.RoleRepository;
 import com.bootcamp.dscatalog.repository.UserRepository;
 import com.bootcamp.dscatalog.services.exceptions.DataBaseException;

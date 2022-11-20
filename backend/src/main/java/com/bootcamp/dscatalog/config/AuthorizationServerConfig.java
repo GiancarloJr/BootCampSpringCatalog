@@ -16,17 +16,17 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
-import java.util.ArrayList;
+
 import java.util.Arrays;
 
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    @Value("${security.oauth2.client.client-id}")
+    @Value("${CLIENT_ID:myclientid}")
     private String clientId;
 
-    @Value("${security.oauth2.client.client-secret}")
+    @Value("${CLIENT_SECRET:myclientsecret}")
     private String clientSecret;
 
     @Value("${jwt.duration}")

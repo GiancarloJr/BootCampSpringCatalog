@@ -24,7 +24,7 @@ public class UserResource {
 	@Autowired
 	private UserServices userServices;
 
-	@GetMapping("/")
+	@GetMapping()
 	public ResponseEntity<Page<UserDTO>> findAll(Pageable pageable) {
 		// PARAMETROS:  page, size, sort.
 		Page<UserDTO> list = userServices.findAllPaged(pageable);

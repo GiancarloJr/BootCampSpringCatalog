@@ -26,7 +26,7 @@ public class ProductResource {
 	@Autowired
 	private ProductServices productServices;
 
-	@GetMapping("/")
+	@GetMapping()
 	public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable) {
 		// PARAMETROS:  page, size, sort.
 		Page<ProductDTO> list = productServices.findAllPaged(pageable);

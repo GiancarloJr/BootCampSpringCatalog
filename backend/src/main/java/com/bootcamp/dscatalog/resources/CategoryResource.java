@@ -14,13 +14,13 @@ import com.bootcamp.dscatalog.services.CategoryServices;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/categories")
 public class CategoryResource {
 
 	@Autowired
 	private CategoryServices categoryServices;
 
-	@GetMapping("/")
+	@GetMapping()
 	public ResponseEntity<Page<CategoryDTO>> findAll(Pageable pageable) {
 		
 		Page<CategoryDTO> list = categoryServices.findAllPaged(pageable);

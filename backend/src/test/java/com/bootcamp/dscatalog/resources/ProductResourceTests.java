@@ -56,7 +56,7 @@ public class ProductResourceTests {
 
 
 
-        Mockito.when(productServices.findAllPaged(any())).thenReturn(page);
+  //      Mockito.when(productServices.findAllPaged(any())).thenReturn(page);
         Mockito.when(productServices.findById(existingId)).thenReturn(productDTO);
         Mockito.when(productServices.findById(noExistingId)).thenThrow(ResourceNotFoundException.class);
         Mockito.when(productServices.update(any())).thenReturn(productDTO);

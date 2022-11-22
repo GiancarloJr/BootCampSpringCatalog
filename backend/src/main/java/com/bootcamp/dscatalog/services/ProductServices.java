@@ -17,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -29,19 +31,27 @@ public class ProductServices {
 	@Autowired
 	private CategoryRepository categoryRepository;
 
-	@Transactional(readOnly = true)
-	public Page<ProductDTO> findAllPaged(Pageable pageable){
-		//USANDO STREAM E MAP PARA DTO
-		Page<Product>  list = productRepository.findAll(pageable);
-		return list.map(cat -> new ProductDTO(cat));
-	
+//	@Transactional(readOnly = true)
+//	public Page<ProductDTO> findAllPaged(Pageable pageable){
+//		//USANDO STREAM E MAP PARA DTO
+//		Page<Product>  list = productRepository.findAll(pageable);
+//		return list.map(cat -> new ProductDTO(cat));
+//
 		//USANDO FOREACH PARA DTO
 		//List<ProductDTO>  dto = new ArrayList<>();
 //		for (product product : productRepository.findAll()) {
 //			dto.add(new ProductDTO(product));
 //		}
 //		return dto;
+//	}
+
+	@Transactional(readOnly = true)
+	public Page<ProductDTO> findAllPaged(Long categoryId, Pageable pageable) {
+		Category category = (categoryId == 0) ? null : categoryRepository.getReferenceById(categoryId);
+		Page<Product> list = productRepository.find(category, pageable);
+		return list.map(x -> new ProductDTO(x));
 	}
+
 	@Transactional(readOnly = true)
 	public ProductDTO findById(Long id){
 		Optional<Product> obj = productRepository.findById(id);

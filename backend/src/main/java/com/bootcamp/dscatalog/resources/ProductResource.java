@@ -26,13 +26,25 @@ public class ProductResource {
 	@Autowired
 	private ProductServices productServices;
 
-	@GetMapping()
-	public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable) {
-		// PARAMETROS:  page, size, sort.
-		Page<ProductDTO> list = productServices.findAllPaged(pageable);
-		
+//	@GetMapping("/semcategoria")
+//	public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable) {
+//		// PARAMETROS:  page, size, sort.
+//		Page<ProductDTO> list = productServices.findAllPaged(pageable);
+//
+//		return ResponseEntity.ok().body(list);
+//	}
+
+	//FILTRO COM CATEGORIA
+	@GetMapping
+	public ResponseEntity<Page<ProductDTO>> findAll(
+			@RequestParam(value = "categoryId", defaultValue = "0") Long categoryId,
+		//	@RequestParam(value = "name", defaultValue = "") String name,
+			Pageable pageable) {
+
+		Page<ProductDTO> list = productServices.findAllPaged(categoryId, pageable);
 		return ResponseEntity.ok().body(list);
 	}
+
 
 	@GetMapping("/{id}")
 	public ResponseEntity<ProductDTO> findById(@PathVariable Long id) {

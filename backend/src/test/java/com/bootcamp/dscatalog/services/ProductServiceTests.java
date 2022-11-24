@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -21,17 +20,15 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.persistence.EntityNotFoundException;
-import java.awt.print.Pageable;
-import java.util.ArrayList;
+
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+
 
 @ExtendWith(SpringExtension.class)
 public class ProductServiceTests {
@@ -64,28 +61,36 @@ public class ProductServiceTests {
                 category = Factory.createCategory();
                 productDTO = Factory.createProductDTO();
 
-                Mockito.when(repository.save(ArgumentMatchers.any())).thenReturn(product);
+                Mockito.when(repository.save(any())).thenReturn(product);
+
                 Mockito.when(repository.findById(existingId)).thenReturn(Optional.of(product));
                 Mockito.when(repository.findById(noExistingId)).thenReturn(Optional.empty());
-                Mockito.when(categoryRepository.getReferenceById(existingId)).thenReturn(category);
-                Mockito.when(categoryRepository.getReferenceById(noExistingId)).thenThrow(ResourceNotFoundException.class);
-                Mockito.when(repository.getReferenceById(existingId)).thenReturn(product);
-                Mockito.when(repository.getReferenceById(noExistingId)).thenThrow(ResourceNotFoundException.class);
-                Mockito.when(repository.findAll((org.springframework.data.domain.Pageable)ArgumentMatchers.any())).thenReturn(page);
+
+                Mockito.when(repository.find(any(),any(), any())).thenReturn(page);
+
+                Mockito.when(categoryRepository.getOne(existingId)).thenReturn(category);
+                Mockito.when(categoryRepository.getOne(noExistingId)).thenThrow(ResourceNotFoundException.class);
+
+                Mockito.when(repository.getOne(existingId)).thenReturn(product);
+                Mockito.when(repository.getOne(noExistingId)).thenThrow(ResourceNotFoundException.class);
+
+                Mockito.when(repository.findAll((Pageable) any())).thenReturn(page);
+
                 Mockito.doNothing().when(repository).deleteById(existingId);
+
                 Mockito.doThrow(EmptyResultDataAccessException.class).when(repository).deleteById(noExistingId);
                 Mockito.doThrow(DataIntegrityViolationException.class).when(repository).deleteById(dependentId);
         }
 
-//        @Test
-//        public void findAllPagedShouldReturnPage(){
-//
-//                PageRequest pageable = PageRequest.of(0,10);
-//                Page<ProductDTO> result = service.findAllPaged(pageable);
-//
-//                Assertions.assertNotNull(result);
-//                Mockito.verify(repository, Mockito.times(1)).findAll(pageable);
-//        }
+        @Test
+        public void findAllPagedShouldReturnPage(){
+
+                PageRequest pageable = PageRequest.of(0,10);
+                Page<ProductDTO> result = service.findAllPaged(0L, "",pageable);
+
+                Assertions.assertNotNull(result);
+
+        }
 
         @Test
         public void deleteShouldDoNothingWhenIdExists(){

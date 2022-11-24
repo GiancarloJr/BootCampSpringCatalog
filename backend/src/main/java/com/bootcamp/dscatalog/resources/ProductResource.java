@@ -60,7 +60,6 @@ public class ProductResource {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<ProductDTO> update(@PathVariable("id") Long id,@Valid @RequestBody ProductDTO productDTO) {
-		productDTO.setId(id);
 		return ResponseEntity.ok().body(productServices.update(productDTO));
 	}
 

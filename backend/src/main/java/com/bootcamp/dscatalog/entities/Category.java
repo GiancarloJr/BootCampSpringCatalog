@@ -21,8 +21,8 @@ public class Category{
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant createdAt;
 	
-	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-	private Instant updateAt;
+//	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+//	private Instant updateAt;
 
 	@ManyToMany(mappedBy = "categories")
 	private Set<Product> products = new HashSet<>();
@@ -55,9 +55,9 @@ public class Category{
 		return createdAt;
 	}
 
-	public Instant getUpdateAt() {
-		return updateAt;
-	}
+//	public Instant getUpdateAt() {
+//		return updateAt;
+//	}
 
 	public Set<Product> getProducts() {
 		return products;
@@ -72,10 +72,10 @@ public class Category{
 		createdAt = Instant.now();
 	}
 	
-	@PreUpdate
-	public void preUpdate() {
-		updateAt = Instant.now();
-	}
+//	@PreUpdate
+//	public void preUpdate() {
+//		updateAt = Instant.now();
+//	}
 
 	@Override
 	public int hashCode() {

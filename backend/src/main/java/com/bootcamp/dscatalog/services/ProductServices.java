@@ -12,11 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -47,7 +47,7 @@ public class ProductServices {
 
 	@Transactional(readOnly = true)
 	public Page<ProductDTO> findAllPaged(Long categoryId, String name, Pageable pageable) {
-		List<Category> categories = (categoryId == 0) ? null : Arrays.asList(categoryRepository.getReferenceById(categoryId));
+		List<Category> categories = (categoryId == 0) ? null : Arrays.asList(categoryRepository.getOne(categoryId));
 		Page<Product> page = productRepository.find(categories, name.trim(), pageable);
 		productRepository.findProductsWithCategories(page.getContent());
 		return page.map(x -> new ProductDTO(x, x.getCategories()));
@@ -75,7 +75,7 @@ public class ProductServices {
 
 		entity.getCategories().clear();
 		for(CategoryDTO catDTO: dto.getCategories()){
-			Category category = categoryRepository.getReferenceById(catDTO.getId());
+			Category category = categoryRepository.getOne(catDTO.getId());
 			entity.getCategories().add(category);
 		}
 
@@ -84,7 +84,6 @@ public class ProductServices {
 	public ProductDTO update(ProductDTO productDTO){
 		try {
 			Optional<Product> obj = productRepository.findById(productDTO.getId());
-			copyDtoToEntity(productDTO, obj.get());
 			return new ProductDTO(productRepository.save(obj.get()));
 		} catch (NoSuchElementException e){
 			throw new ResourceNotFoundException("Entity not found");
@@ -99,6 +98,21 @@ public class ProductServices {
 			throw new DataBaseException("Integraty violation");
 		}
 	}
+
+	public ProductDTO update2(Long id, ProductDTO productDTO) {
+		try {
+			Product entity = productRepository.getOne(id);
+			copyDtoToEntity(productDTO, entity);
+			entity = productRepository.save(entity);
+			return new ProductDTO(entity);
+		}
+		catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException("Id not found " + id);
+		}
+
+
+	}
+
 
 //	public ProductDTO entityParaDTO(Product product){
 //		return new ProductDTO(product);

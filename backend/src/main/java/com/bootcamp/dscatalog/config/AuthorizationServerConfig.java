@@ -23,10 +23,10 @@ import java.util.Arrays;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    @Value("${CLIENT_ID:myclientid}")
+    @Value("${security.oauth2.client.client-id}")
     private String clientId;
 
-    @Value("${CLIENT_SECRET:myclientsecret}")
+    @Value("${security.oauth2.client.client-secret}")
     private String clientSecret;
 
     @Value("${jwt.duration}")
@@ -37,7 +37,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    private JwtAccessTokenConverter jwtAccessTokenConverter;
+    private JwtAccessTokenConverter accessTokenConverter;
 
     @Autowired
     private JwtTokenStore jwtTokenStore;
@@ -69,11 +69,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 
         TokenEnhancerChain chain = new TokenEnhancerChain();
-        chain.setTokenEnhancers(Arrays.asList(jwtAccessTokenConverter, jwtTokenEnhancer));
+        chain.setTokenEnhancers(Arrays.asList(accessTokenConverter, jwtTokenEnhancer));
 
         endpoints.authenticationManager(authenticationManager)
                 .tokenStore(jwtTokenStore)
-                .accessTokenConverter(jwtAccessTokenConverter)
+                .accessTokenConverter(accessTokenConverter)
                 .tokenEnhancer(chain);
     }
 }

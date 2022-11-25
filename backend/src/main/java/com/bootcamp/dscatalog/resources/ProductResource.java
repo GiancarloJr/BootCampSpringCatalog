@@ -60,7 +60,8 @@ public class ProductResource {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<ProductDTO> update(@PathVariable("id") Long id,@Valid @RequestBody ProductDTO productDTO) {
-		return ResponseEntity.ok().body(productServices.update(productDTO));
+		ProductDTO dto = productServices.update2(id, productDTO);
+		return ResponseEntity.ok().body(dto);
 	}
 
 	@DeleteMapping("/{id}")

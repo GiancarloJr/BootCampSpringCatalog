@@ -73,8 +73,8 @@ public class ProductResourceTests {
         Mockito.when(productServices.findById(existingId)).thenReturn(productDTO);
         Mockito.when(productServices.findById(noExistingId)).thenThrow(ResourceNotFoundException.class);
 
-        Mockito.when(productServices.update(any())).thenReturn(productDTO);
-        Mockito.when(productServices.update(any())).thenThrow(ResourceNotFoundException.class);
+        Mockito.when(productServices.update2(eq(existingId),any())).thenReturn(productDTO);
+        Mockito.when(productServices.update2(eq(noExistingId),any())).thenThrow(ResourceNotFoundException.class);
 
         Mockito.when(productServices.save(any())).thenReturn(productDTO);
         Mockito.doNothing().when(productServices).delete(existingId);
@@ -138,7 +138,7 @@ public class ProductResourceTests {
 //        result.andExpect(jsonPath("$.description").exists());
     }
     @Test
-    public void updateShouldReturnThrowNotFoundWhenIDExists() throws Exception{
+    public void updateShouldReturnThrowNotFoundWhenIDNotExists() throws Exception{
 
         String accessToken = tokenUtil.obtainAccessToken(mockMvc, username, password);
 

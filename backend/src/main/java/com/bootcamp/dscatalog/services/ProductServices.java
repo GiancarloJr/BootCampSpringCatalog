@@ -101,7 +101,7 @@ public class ProductServices {
 
 	public ProductDTO update2(Long id, ProductDTO productDTO) {
 		try {
-			Product entity = productRepository.getOne(id);
+			Product entity = productRepository.getReferenceById(id);
 			copyDtoToEntity(productDTO, entity);
 			entity = productRepository.save(entity);
 			return new ProductDTO(entity);

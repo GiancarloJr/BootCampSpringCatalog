@@ -10,10 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
+
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -41,10 +41,9 @@ public class ProductResource {
 			@RequestParam(value = "name", defaultValue = "") String name,
 			Pageable pageable) {
 
-		Page<ProductDTO> list = productServices.findAllPaged(categoryId, name, pageable);
+		Page<ProductDTO> list = productServices.findAllPaged(categoryId, name.trim(), pageable);
 		return ResponseEntity.ok().body(list);
 	}
-
 
 	@GetMapping("/{id}")
 	public ResponseEntity<ProductDTO> findById(@PathVariable Long id) {

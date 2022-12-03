@@ -1,8 +1,9 @@
+import './assets/styles/custom.scss';
 import './App.css';
 
 function App() {
   return(
-    <h1>Hello DsCatalog</h1>
+    <h1 className='bg-success'>Hello DsCatalog</h1>
   );
 }
 
